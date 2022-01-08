@@ -9,6 +9,7 @@ djangorestframework = "*"
 djangorestframework-simplejwt = "*"
 django-phonenumber-field = {extras = ["phonenumberslite"], version = "*"}
 psycopg2 = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 
