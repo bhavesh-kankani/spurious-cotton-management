@@ -1,17 +1,22 @@
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import InfoCard from "./InfoCard";
 import ScanProductModal from "./ScanProductModal";
 import RegisterProductModal from "./RegisterProductModal";
+import AuthContext from "../context/AuthContext";
+import axios from "axios";
 
-const Homepage = ({ userType }) => {
+const Homepage = ({ history }) => {
+    const { userType, authTokens } = useContext(AuthContext);
     const scanText = "Previously Scanned Products";
     const registerText = "Previously Registered Products";
     const scanButtonText = "Scan a Product";
     const registerButtonText = "Register a Product";
     const [customerModalOpen, setCustomerModalOpen] = useState(false);
     const [manufacturerModalOpen, setManufacturerModalOpen] = useState(false);
+    const [productData, setProductData] = useState([]);
+
     const handleCustomerClose = () => {
         setCustomerModalOpen(false);
     };
@@ -25,7 +30,38 @@ const Homepage = ({ userType }) => {
             setManufacturerModalOpen(true);
         }
     };
-    // useEffect(() => {}, []);
+
+    useEffect(() => {
+        if (userType === "Customer") {
+            axios
+                .get(
+                    `http://localhost:8000/products/scanned-product-details/`,
+                    {
+                        headers: {
+                            Authorization:
+                                "Bearer " + String(authTokens.access),
+                        },
+                    }
+                )
+                .then((res) => {
+                    setProductData(res.data.previouslyScannedProducts);
+                });
+        } else {
+            axios
+                .get(
+                    `http://localhost:8000/products/register-product-details/`,
+                    {
+                        headers: {
+                            Authorization:
+                                "Bearer " + String(authTokens.access),
+                        },
+                    }
+                )
+                .then((res) => {
+                    setProductData([...res.data]);
+                });
+        }
+    }, []);
     return (
         <div
             className="content"
@@ -50,6 +86,7 @@ const Homepage = ({ userType }) => {
                 <InfoCard
                     heading={userType === "Customer" ? scanText : registerText}
                     type={"details"}
+                    productData={productData}
                     // size={"large"}
                 />
             </Box>

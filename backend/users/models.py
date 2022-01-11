@@ -17,7 +17,6 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(_("You must provide an email address."))
         else:
             pass
-        other_fields.setdefault("is_active", True)
         user = self.model(email = self.normalize_email(email), **other_fields)
         user.set_password(password)
         user.save()
@@ -34,11 +33,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=255)
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
     user_name = models.CharField(max_length=32, unique=True, blank=False, null=True)
-    first_name = models.CharField(max_length=32)
-    last_name = models.CharField(max_length=32)
+    first_name = models.CharField(max_length=32, null=True)
+    last_name = models.CharField(max_length=32, null=True)
     phone_number = PhoneNumberField()
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     objects = CustomUserManager()
 

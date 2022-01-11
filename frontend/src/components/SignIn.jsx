@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
     createTheme,
@@ -16,11 +16,17 @@ import {
 } from "@mui/material";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
+import AuthContext from "../context/AuthContext";
 
 const theme = createTheme();
 
-export default function SignIn({ setIsSignIn, setIsLoggedIn }) {
+export default function SignIn({ history }) {
     const [showPassword, setShowPassword] = useState(false);
+    const { authTokens, loginUser, user } = useContext(AuthContext);
+
+    if (authTokens && user?.userType) {
+        history.push("/");
+    }
 
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
@@ -30,18 +36,8 @@ export default function SignIn({ setIsSignIn, setIsLoggedIn }) {
         setShowPassword(!showPassword);
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        // eslint-disable-next-line no-console
-        console.log({
-            email: data.get("email"),
-            password: data.get("password"),
-        });
-    };
-
-    const handleClick = () => {
-        setIsSignIn(false);
+    const handleRedirect = () => {
+        history.push("/signup");
     };
 
     return (
@@ -72,7 +68,7 @@ export default function SignIn({ setIsSignIn, setIsLoggedIn }) {
                         </Typography>
                         <Box
                             component="form"
-                            onSubmit={handleSubmit}
+                            onSubmit={loginUser}
                             noValidate
                             sx={{ mt: 1 }}
                         >
@@ -118,8 +114,6 @@ export default function SignIn({ setIsSignIn, setIsLoggedIn }) {
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
-                                // REMOVE
-                                onClick={() => setIsLoggedIn(true)}
                             >
                                 Sign In
                             </Button>
@@ -130,7 +124,7 @@ export default function SignIn({ setIsSignIn, setIsLoggedIn }) {
                                 <Grid item>
                                     <Link
                                         variant="body2"
-                                        onClick={handleClick}
+                                        onClick={handleRedirect}
                                         sx={{ cursor: "pointer" }}
                                     >
                                         {"Sign Up"}

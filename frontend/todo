@@ -1,3 +1,6 @@
+- Manufacturer: QRcode styling 
+- fix profile modal
+- remove console warnings
 - Prep containers for API data
 - /signin, /signup for signin and signup routes
 - Modals size adjustment

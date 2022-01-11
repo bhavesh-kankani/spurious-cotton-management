@@ -19,6 +19,7 @@ class ScannedProducts(models.Model):
     )
     
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(ProductDetails, on_delete=models.CASCADE)
+    product = models.OneToOneField(ProductDetails, on_delete=models.CASCADE)
     status = models.PositiveSmallIntegerField(choices=_choices)
+    scanned_date = models.DateField(default=timezone.now)
 

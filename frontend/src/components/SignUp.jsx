@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -22,13 +21,12 @@ import {
     InputAdornment,
     IconButton,
 } from "@mui/material";
-import { emailRegex, phoneRegex, passwordRegex } from "../utils";
-import axiosInstance from "../axios";
+import { emailRegex, phoneRegex, passwordRegex } from "../utils/utils";
+import axios from "axios";
 
 const theme = createTheme();
 
-export default function SignUp({ setIsSignIn }) {
-    const history = useHistory();
+export default function SignUp({ history }) {
     const [showPassword, setShowPassword] = useState(false);
     const [usertype, setUsertype] = useState("Customer");
     const [errors, setErrors] = useState({});
@@ -60,14 +58,12 @@ export default function SignUp({ setIsSignIn }) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         if (validate(data)) {
-            axiosInstance.post(`users/signup/`, data).then((res) => {
-                history.push("/signin");
-            });
+            axios
+                .post(`http://localhost:8000/users/signup/`, data)
+                .then((res) => {
+                    history.push("/signin");
+                });
         }
-    };
-
-    const handleClick = () => {
-        setIsSignIn(true);
     };
 
     const handleMouseDownPassword = (event) => {
@@ -122,9 +118,9 @@ export default function SignUp({ setIsSignIn }) {
                                             label="Register As"
                                             name="registerAs"
                                             value={usertype}
-                                            onChange={(e) =>
-                                                setUsertype(e.target.value)
-                                            }
+                                            onChange={(e) => {
+                                                setUsertype(e.target.value);
+                                            }}
                                             autoFocus
                                         >
                                             <MenuItem value="Customer">
@@ -272,7 +268,9 @@ export default function SignUp({ setIsSignIn }) {
                                 <Grid item>
                                     Already have an account?&nbsp;
                                     <Link
-                                        onClick={handleClick}
+                                        onClick={() => {
+                                            history.push("/signin");
+                                        }}
                                         variant="body2"
                                         sx={{ cursor: "pointer" }}
                                     >
