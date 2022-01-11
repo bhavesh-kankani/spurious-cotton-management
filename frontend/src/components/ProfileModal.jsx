@@ -1,7 +1,9 @@
-import * as React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import AuthContext from "../context/AuthContext";
+import axios from "axios";
 
 const style = {
   position: "absolute",
@@ -16,6 +18,20 @@ const style = {
 };
 
 export default function ProfileModal({ open, handleClose }) {
+  const { userType, authTokens } = useContext(AuthContext);
+  const [userData, setUserData] = useState({});
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/users/profile/`, {
+        headers: {
+          Authorization: "Bearer " + authTokens.access,
+        },
+      })
+      .then((res) => {
+        setUserData(res.data);
+      });
+    //eslint-disable-next-line
+  }, []);
   return (
     <div>
       <Modal
@@ -33,17 +49,30 @@ export default function ProfileModal({ open, handleClose }) {
           >
             Profile
           </Typography>
+          {userType === "Customer" ? (
+            <>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <strong>First Name:</strong> {userData.first_name}
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <strong>Last Name:</strong> {userData.last_name}
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <strong>Name:</strong> {userData.user_name}
+              </Typography>
+            </>
+          )}
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <strong>User Type:</strong> Customer
+            <strong>User Type:</strong> {userType}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <strong>First Name:</strong> Nice
+            <strong>Email Address:</strong> {userData.email}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <strong>Last Name:</strong> Nice
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <strong>Email Address:</strong> nice@nice.com
+            <strong>Phone Number:</strong> {userData.phone_number}
           </Typography>
         </Box>
       </Modal>

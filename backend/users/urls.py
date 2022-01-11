@@ -7,4 +7,6 @@ urlpatterns = [
     path('auth/token/', MyTokenObtainPairView.as_view(), name = 'token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name = 'token_refresh'),
     path('signup/', signup),
+    path('profile/', getProfile),
+    path('manufacturers/', getAllManufacturers),
 ]

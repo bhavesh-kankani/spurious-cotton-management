@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import "./App.css";
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Route } from "react-router-dom";
 import Homepage from "./components/Homepage";
 import InformationPortal from "./components/InformationPortal";
-import NavBar from "./components/NavBar";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import ProfileModal from "./components/ProfileModal";
@@ -12,30 +11,24 @@ import PrivateRoute from "./utils/PrivateRoute";
 import Header from "./components/Header";
 
 const App = () => {
-    const [isSignIn, setIsSignIn] = useState(true);
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
-    const [userType, setUserType] = useState("Manufacturer");
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-    return (
-        <div className="App">
-            <Router>
-                <AuthProvider>
-                    <Header />
-                    <PrivateRoute exact path="/" component={Homepage} />
-                    <PrivateRoute
-                        exact
-                        path="/info"
-                        component={InformationPortal}
-                    />
-                    <Route exact path="/signin" component={SignIn} />
-                    <Route exact path="/signup" component={SignUp} />
-                </AuthProvider>
-            </Router>
-        </div>
-    );
+  return (
+    <div className="App">
+      <Router>
+        <AuthProvider>
+          <Header handleOpen={handleOpen} />
+          <ProfileModal open={open} handleClose={handleClose} />
+          <PrivateRoute exact path="/" component={Homepage} />
+          <PrivateRoute exact path="/info" component={InformationPortal} />
+          <Route exact path="/signin" component={SignIn} />
+          <Route exact path="/signup" component={SignUp} />
+        </AuthProvider>
+      </Router>
+    </div>
+  );
 };
 
 export default App;
