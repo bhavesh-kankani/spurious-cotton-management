@@ -39,7 +39,7 @@ def signup(request):
     else:
         pass
     data = {
-        "email": request.data.get("email", None),
+        "email": request.data.get("email", None).lower(),
         "password": request.data.get("password", None),
         "user_type": user_type,
         "user_name": request.data.get("name", None),

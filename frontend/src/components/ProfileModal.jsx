@@ -24,7 +24,7 @@ export default function ProfileModal({ open, handleClose }) {
     axios
       .get(`http://localhost:8000/users/profile/`, {
         headers: {
-          Authorization: "Bearer " + authTokens.access,
+          Authorization: "Bearer " + authTokens?.access,
         },
       })
       .then((res) => {

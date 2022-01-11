@@ -5,7 +5,6 @@ import Homepage from "./components/Homepage";
 import InformationPortal from "./components/InformationPortal";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
-import ProfileModal from "./components/ProfileModal";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./utils/PrivateRoute";
 import Header from "./components/Header";
@@ -19,8 +18,11 @@ const App = () => {
     <div className="App">
       <Router>
         <AuthProvider>
-          <Header handleOpen={handleOpen} />
-          <ProfileModal open={open} handleClose={handleClose} />
+          <Header
+            open={open}
+            handleClose={handleClose}
+            handleOpen={handleOpen}
+          />
           <PrivateRoute exact path="/" component={Homepage} />
           <PrivateRoute exact path="/info" component={InformationPortal} />
           <Route exact path="/signin" component={SignIn} />

@@ -8,7 +8,7 @@ export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
   const history = useHistory();
-
+  const [signInError, setSignInError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [authTokens, setAuthTokens] = useState(() =>
     localStorage.getItem("authTokens")
@@ -25,17 +25,29 @@ export const AuthProvider = ({ children }) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     axios
-      .post("http://localhost:8000/users/auth/token/", data, {
-        headers: {
-          "Content-Type": "application/json",
+      .post(
+        "http://localhost:8000/users/auth/token/",
+        {
+          email: data.get("email").toLowerCase(),
+          password: data.get("password"),
         },
-      })
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           setAuthTokens(res.data);
           setUser(jwt_decode(res.data.access));
           localStorage.setItem("authTokens", JSON.stringify(res.data));
+          setSignInError(false);
         }
+      })
+      .catch(() => {
+        console.clear();
+        setSignInError(true);
       });
   };
 
@@ -97,6 +109,7 @@ export const AuthProvider = ({ children }) => {
     userType: user?.userType,
     loginUser: loginUser,
     logoutUser: logoutUser,
+    signInError: signInError,
   };
   return (
     <AuthContext.Provider value={contextData}>

@@ -30,8 +30,8 @@ const InfoCard = ({ text, heading, type, size, productData }) => {
               paddingX: 2,
             }}
           >
-            {productData?.map((data) => (
-              <Box sx={{ width: "100%" }}>
+            {productData?.map((data, index) => (
+              <Box key={index} sx={{ width: "100%" }}>
                 <Card
                   variant="outlined"
                   sx={{

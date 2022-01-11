@@ -153,12 +153,7 @@ const NavBar = (props) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem
-                onClick={() => {
-                  handleOpen();
-                  handleNavMenu();
-                }}
-              >
+              <MenuItem onClick={handleOpen}>
                 <Typography textAlign="center">Profile</Typography>
               </MenuItem>
               <MenuItem onClick={logoutUser}>

@@ -23,7 +23,6 @@ const InformationPortal = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setManufacturersData(res.data);
       });
     //eslint-disable-next-line
