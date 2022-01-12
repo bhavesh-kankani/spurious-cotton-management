@@ -76,7 +76,7 @@ export default function RegisterProductModal({ open, handleClose }) {
                 .then((res) => {
                     setCiphertext(
                         CryptoJS.AES.encrypt(
-                            res.data.id.toString(),
+                            JSON.stringify(res.data.id),
                             REACT_APP_SECRET_KEY
                         ).toString()
                     );
